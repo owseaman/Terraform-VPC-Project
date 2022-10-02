@@ -37,3 +37,24 @@ variable "availability_zones" {
     type = list(string)
     default =["us-east-1a" , "us-east-1b"]
 }
+
+variable "ingressrules" {
+  type    = list(number)
+  default = [80, 22, 9000, 8080]
+}
+
+variable "egressrules" {
+  type    = list(number)
+  default = [80, 443, 25, 53, 8080]
+}
+
+#AWS Instance type - Map
+variable "instance_type_map" {
+  description = "EC2 instance type"
+  type        = map(string)
+  default = {
+    "dev"     = "t2.micro"
+    "staging" = "t2.medium"
+    "prod"    = "t2.large"
+  }
+}
