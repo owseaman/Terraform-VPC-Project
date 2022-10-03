@@ -6,41 +6,28 @@ resource "aws_security_group" "my_sg" {
     aws_vpc.myvpc
   ]
 
-  ingress {
-    description      = "allow traffic from web"
-    from_port        = 80
-    to_port          = 80
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    #ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
+  dynamic "ingress" {
+    iterator = port
+    for_each = var.ingressrules
+    content {
+    from_port   = port.value
+    to_port     = port.value
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    }
   }
 
-  ingress {
-    description      = "allow ssh traffic"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    #ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
+ dynamic "egress" {
+    iterator = port
+    for_each = var.egressrules
+    content {
+      from_port   = port.value
+      to_port     = port.value
+      protocol    = "TCP"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
   }
-
-  ingress {
-    description      = "allow traffic from web"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    #ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
-  }
-
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    #ipv6_cidr_blocks = ["::/0"]
-  }
-
+  
   tags = {
     Name = "my_sg"
   }
