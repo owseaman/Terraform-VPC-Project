@@ -6,7 +6,7 @@ resource "aws_instance" "My_First_ec2"{
   vpc_security_group_ids = [aws_security_group.my_sg.id]
   key_name = var.key_pair
   user_data = "${file("tomcat.sh")}"
-  count = 3 
+  count = 2 
 
   tags = {
     #"Name" = "tomcat"
